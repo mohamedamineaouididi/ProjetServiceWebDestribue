@@ -1,0 +1,36 @@
+spring:
+  application:
+    name: apiGateway
+
+  cloud:
+    gateway:
+      global-cors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins:
+            - "*"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - PATCH
+              - DELETE
+              - OPTIONS
+            allowedHeaders: "*" # or specify headers
+      routes:
+        - id: STOCKSERVICE
+          uri: lb://STOCKSERVICE
+          predicates:
+            - Path=/stockService/**
+        - id: SERVICEDISCOUNT
+          uri: lb://SERVICEDISCOUNT
+          predicates:
+            - Path=/serviceDiscount/**
+
+server:
+  port: 8080
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka-server:8761/eureka
